@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>confetti</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-preset-confetti@1.16.1/tsparticles.preset.confetti.bundle.min.js
+"></script>
+
+<style>
+    body {
+  background: #000;
+}
+
+#tsparticles canvas {
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  left: 0 !important;
+  top: 0 !important;
+  pointer-events: none !important;
+}
+
+button {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+  z-index: 1000;
+  font-size: 20pt;
+  border-radius: 20px;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  margin-top: 50px;
+  color: #1D1E23;
+}
+
+button:active {
+  color: #f00;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: #1D1E23;
+}
+
+h1 {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+h1 span {
+    color: #FFFF00
+;
+    position: relative;
+}
+
+h1 span::before {
+    content: "";
+    height: 30px;
+    width: 2px;
+    position: absolute;
+    top: 50%;
+    right: -8px;
+    background:#FFFF00
+;
+    transform: translateY(-45%);
+    animation: blink 0.7s infinite;
+}
+
+h1 span.stop-blinking::before {
+    animation: none;
+}
+
+@keyframes blink {
+    50% { opacity: 0 }
+}
+
+
+</style>
+<body>
+    <h1>I'M <span></span></h1>
+
+    <button id="btnParty" type="button">click me!</button>
+<div id="tsparticles"></div>
+
+
+<script>
+    btnParty.addEventListener("click", () => {
+  confetti("tsparticles", {
+    angle: 90,
+    count: 25,
+    position: { x: 50, y: 50 },
+
+    
+    spread: 90,
+    startVelocity: 60,
+    decay: 0.9,
+    gravity: 1,
+    drift: 0,
+    ticks: 200,
+    colors: ["#fff", "#f00"],
+    shapes: ["square", "circle"],
+    scalar: 1,
+    zIndex: 2000,
+    disableForReducedMotion: true
+  });
+});
+const dynamicText = document.querySelector("h1 span");
+const words = ["front end developer.", "programmer.", "coder.", ];
+
+// Variables to track the position and deletion status of the word
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+const typeEffect = () => {
+    const currentWord = words[wordIndex];
+    const currentChar = currentWord.substring(0, charIndex);
+    dynamicText.textContent = currentChar;
+    dynamicText.classList.add("stop-blinking");
+
+    if (!isDeleting && charIndex < currentWord.length) {
+        // If condition is true, type the next character
+        charIndex++;
+        setTimeout(typeEffect, 200);
+    } else if (isDeleting && charIndex > 0) {
+        // If condition is true, remove the previous character
+        charIndex--;
+        setTimeout(typeEffect, 100);
+    } else {
+        // If word is deleted then switch to the next word
+        isDeleting = !isDeleting;
+        dynamicText.classList.remove("stop-blinking");
+        wordIndex = !isDeleting ? (wordIndex + 1) % words.length : wordIndex;
+        setTimeout(typeEffect, 1200);
+    }
+}
+
+typeEffect();
+</script>
+</body>
+</html>
